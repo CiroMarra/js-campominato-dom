@@ -20,8 +20,11 @@ startGame.addEventListener('click', generateGrid);
 resetGame.addEventListener('click', resetGrid);
 
 const bombs = []; 
+const bombsArray = [];
+
 const grid = 100; 
-let bombCount = 16; 
+let bombCount = 16;
+
 
 // Funzione che serve a creare la griglia di gioco 
 function generateGrid() {
@@ -34,9 +37,8 @@ function generateGrid() {
         mainGrid.append(newSquare);
     }
 }
-// funzione hce serve a generare le bombe
+// funzione hce serve a generare le bombe - V
 function generateBombs() {
-    const bombsArray = [];
     while (bombsArray.length < bombCount) {
         const random = Math.floor(Math.random() * grid) + 1;
         if (!bombsArray.includes(random)) {
@@ -44,9 +46,11 @@ function generateBombs() {
             bombs.push(random); // aggiunge le bombe generate
         }
     }
-    return bombsArray.length; // segna il numero di bombe generate
+    console.log(bombsArray)
+    // segna il numero di bombe generate
 }
 
+let score = [];
 // funzione che genera dei div con una serie di classi al cui interno viene stampato un numero.
 function generateSquare(number) {
     // crea il div 
@@ -55,50 +59,59 @@ function generateSquare(number) {
         newSquare.classList.add('square');
         // assegna all'interno dei div appena creato uno span con l'interno il numero del div
         newSquare.innerHTML = `<span>${number}</span>`;
+
        
 // crea una funziona con evento "click" se la cella contiene una bomba la cella si colora di rosso se invece non contiene una bomba la cella si colora di azzurro
-newSquare.addEventListener('click', function() {
-    if (bombs.includes(number)) {
-        // La cella è una bomba
-        this.classList.add('bomb');
-        endGame(false);
-    } else {
-        // La cella non è una bomba
-        this.classList.add('color');
-        winner();
-    }
+    newSquare.addEventListener('click', function() {
+
+        if (bombs.includes(number)) {
+            // La cella è una bomba
+            this.classList.add('bomb');
+            endGame(false);
+        } else {
+      
+            score.push(number);
+            console.log(score.length)
+            // La cella non è una bomba
+            this.classList.add('color');
+            winner();
+        }
     });
+
+ 
 
     return newSquare;
 
-    };
+};
 
     // crea una funzione che serve a determinare se il giocatore ha perso
-    function endGame(win) {
-        const mainGrid = document.getElementById('grid');
-        const squares = mainGrid.querySelectorAll('.square');
-        squares.forEach(square => {
-            if (!square.classList.contains('bomb')) {
-                square.classList.add('color');
-            }
-        });
-    
-        if (win) {
-            alert('Hai vinto!');
-        } else {
-            alert('Hai perso!');
+function endGame(win) {
+    const mainGrid = document.getElementById('grid');
+    const squares = mainGrid.querySelectorAll('.square');
+    console.log(squares)
+    for (let i = 0; i < squares.length; i++) {
+        const square = squares[i];
+        if (!square.classList.contains('bomb')) {
+            square.classList.add('color');
         }
     }
 
-    // crea una funzione che serve a determinate le condizioni di vittoria per il giocatore
-    function winner() {
-        const colorSquare = document.querySelectorAll('.color');
-        const remainSquare = grid - colorSquare.length; 
-        if (remainSquare === bombCount) {
-            endGame(true); 
-        }
+    if (win) {
+        alert('hai vinto il tuo punteggio è: ' + score.length);
+    } else {
+        alert('hai perso il tuo punteggio è: ' + score.length);
     }
-    
+}
+
+    // crea una funzione che serve a determinate le condizioni di vittoria per il giocatore
+function winner() {
+    const colorSquare = document.querySelectorAll('.color');
+    const remainSquare = grid - colorSquare.length; 
+    if (remainSquare === bombCount) {
+        endGame(true); 
+    }
+}
+
 
    
 
