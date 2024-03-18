@@ -1,0 +1,33 @@
+
+#grid {
+    width: 750px;
+    height: 750px;
+    margin: 50px auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.square {
+    width: calc(100% / 10);
+    height: calc(100% / 10);
+    border: 2px solid black;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.square.color {
+    background-color: skyblue;
+}
+
+.grid-container {
+    background-color: aquamarine;
+}
+
+.ms-img {
+    width: 20%;
+    height: 20%;
+}
