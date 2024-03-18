@@ -23,6 +23,10 @@
     background-color: skyblue;
 }
 
+.square.bomb {
+    background-color: red;
+}
+
 .grid-container {
     background-color: aquamarine;
 }

@@ -19,15 +19,32 @@ startGame.addEventListener('click', generateGrid);
 // fa scomparire del tutto la griglia dopo il click da parte del player sul pulsante "Reset"
 resetGame.addEventListener('click', resetGrid);
 
-// Funzione che serve a creare una sola griglia di gioco con dieci caselle e dieci righe
+const bombs = []; 
+const grid = 100; 
+let bombCount = 16; 
+
+// Funzione che serve a creare la griglia di gioco 
 function generateGrid() {
     const mainGrid = document.getElementById('grid');
     mainGrid.innerHTML = '';
-
-    for (let i = 1; i <= 100; i++) {
+    bombCount = generateBombs();
+    
+    for (let i = 1; i <= grid; i++) {
         const newSquare = generateSquare(i);
         mainGrid.append(newSquare);
     }
+}
+// funzione hce serve a generare le bombe
+function generateBombs() {
+    const bombsArray = [];
+    while (bombsArray.length < bombCount) {
+        const random = Math.floor(Math.random() * grid) + 1;
+        if (!bombsArray.includes(random)) {
+            bombsArray.push(random);
+            bombs.push(random); // aggiunge le bombe generate
+        }
+    }
+    return bombsArray.length; // segna il numero di bombe generate
 }
 
 // funzione che genera dei div con una serie di classi al cui interno viene stampato un numero.
@@ -39,35 +56,54 @@ function generateSquare(number) {
         // assegna all'interno dei div appena creato uno span con l'interno il numero del div
         newSquare.innerHTML = `<span>${number}</span>`;
        
-// crea una funziona con evento "click" - il player può decidere di cliccare su una casella numerata e il colore al suo interno cambia
-     newSquare.addEventListener('click', function() {
-        if(number) {
-           // aggiunge, al momento del click sulla casella la classe "color" che serve a colorare la casella scelta dal player di azzurro.
-            this.classList.toggle('color');
-            // console a cui interno viene stampato un messagio con "Il player ha cliccato:" assieme al numero della casella.
-            console.log(`Il player ha cliccato: ${number}`);
-        } 
-    })
+// crea una funziona con evento "click" se la cella contiene una bomba la cella si colora di rosso se invece non contiene una bomba la cella si colora di azzurro
+newSquare.addEventListener('click', function() {
+    if (bombs.includes(number)) {
+        // La cella è una bomba
+        this.classList.add('bomb');
+        endGame(false);
+    } else {
+        // La cella non è una bomba
+        this.classList.add('color');
+        winner();
+    }
+    });
 
     return newSquare;
 
     };
+
+    // crea una funzione che serve a determinare se il giocatore ha perso
+    function endGame(win) {
+        const mainGrid = document.getElementById('grid');
+        const squares = mainGrid.querySelectorAll('.square');
+        squares.forEach(square => {
+            if (!square.classList.contains('bomb')) {
+                square.classList.add('color');
+            }
+        });
+    
+        if (win) {
+            alert('Hai vinto!');
+        } else {
+            alert('Hai perso!');
+        }
+    }
+
+    // crea una funzione che serve a determinate le condizioni di vittoria per il giocatore
+    function winner() {
+        const colorSquare = document.querySelectorAll('.color');
+        const remainSquare = grid - colorSquare.length; 
+        if (remainSquare === bombCount) {
+            endGame(true); 
+        }
+    }
+    
+
+   
+
     // crea una funzione che serve a resettare completamente la griglia facendola scomparire.
     function resetGrid() {
         grid.innerHTML = '';
     
     }
-
-
-
-  
-
-    
-
-
-
-
-    
-
-
-
